@@ -1,5 +1,5 @@
-@import 'maplibre-gl/dist/maplibre-gl.css';
 @import "tailwindcss";
+@import 'maplibre-gl/dist/maplibre-gl.css';
 
 :root {
   --background: #ffffff;
@@ -33,3 +33,55 @@ body {
 .pill      { @apply inline-flex items-center rounded-lg px-2.5 py-1 text-sm border border-white/10 bg-white/5; }
 .subtle    { @apply text-gray-300; }
 html,body  { @apply bg-neutral-950 text-neutral-100; }
+
+/*Don't let the attribution text get selected while dragging */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/*Remove iOS/Android tap highlight */
+.maplibregl-ctrl-attrib-button,
+.maplibregl-ctrl-attrib a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.maplibregl-ctrl-attrib-button:focus,
+.maplibregl-ctrl-attrib-button:focus-visible,
+.maplibregl-ctrl-attrib a:focus,
+.maplibregl-ctrl-attrib a:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib .maplibregl-ctrl-attrib-inner {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/*keep it snug in the corner */
+.maplibregl-ctrl-bottom-right .maplibregl-ctrl {
+  margin: 0 2px 2px 0;
+}
+
+/*tone the text down a bit on dark maps */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib a {
+  color: rgba(255,255,255,.65) !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,.35);
+}
+
+/* Smaller attribution text */
+.maplibregl-ctrl-attrib,
+.maplibregl-ctrl-attrib a {
+  font-size: 1px !important;
+  line-height: .3 !important;
+}
+
+/* tighten link spacing a touch */
+.maplibregl-ctrl-attrib a + a { margin-left: .35rem; }

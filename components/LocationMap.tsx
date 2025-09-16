@@ -4,51 +4,33 @@ import maplibregl from 'maplibre-gl';
 
 const MAP_STYLE =
   process.env.NEXT_PUBLIC_MAP_STYLE ??
-  'https://api.maptiler.com/maps/basic-v2-dark/style.json?key=' +
-    process.env.NEXT_PUBLIC_MAPTILER_KEY;
+  `https://api.maptiler.com/maps/basic-v2-dark/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`;
 
 export default function LocationMap() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const initialized = useRef(false); // guard for dev re-mounts
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || initialized.current) return;
-    initialized.current = true;
+    if (!ref.current) return;
 
     const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: MAP_STYLE,
-      center: [-77.187, 38.789],
+      container: ref.current,
+      style: MAP_STYLE,               // Basic v2 Dark (MapTiler)
+      center: [-77.187, 38.789],      // Springfield, VA
       zoom: 11,
-      logoPosition: 'bottom-right',
+      attributionControl: false,      // turn off the default control (the ⓘ)
     });
 
-    // ⓘ icon-style attribution
+    // Add exactly one attribution control (full text)
     map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
+      new maplibregl.AttributionControl({ compact: false }),
       'bottom-right'
     );
 
-    // marker
+    // marker in the center
     new maplibregl.Marker().setLngLat([-77.187, 38.789]).addTo(map);
 
-    return () => {
-      map.remove();
-      initialized.current = false;
-    };
+    return () => map.remove();
   }, []);
 
-  // Map fills the card; overlay fades bottom into page
-  return (
-    <div className="relative card overflow-hidden h-60">
-      <div ref={containerRef} className="absolute inset-0" />
-      <div
-        className="
-          pointer-events-none absolute inset-x-0 bottom-0 h-16
-          bg-[linear-gradient(transparent,#9d9da200_60%,#fafafa)]
-          dark:bg-[linear-gradient(transparent,#18181b73_60%,#0a0a0a)]
-        "
-      />
-    </div>
-  );
+  return <div className="card overflow-hidden h-60" ref={ref} />;
 }
