@@ -85,3 +85,38 @@ html,body  { @apply bg-neutral-950 text-neutral-100; }
 
 /* tighten link spacing a touch */
 .maplibregl-ctrl-attrib a + a { margin-left: .35rem; }
+
+.map-fade::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 20%;                 /* raise/lower to cover more/less */
+  pointer-events: none;
+  z-index: 10;                 /* sits above canvas */
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0,
+    rgba(0,0,0,0) calc(100% - 32px),   /* start fade ~32px from bottom */
+    rgba(0,0,0,0.55) calc(100% - 16px),/* quick ramp */
+    var(--background) 100%             /* solid at bottom */
+  );
+}
+
+/* Light mode version */
+@media (prefers-color-scheme: light) {
+  .map-fade::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(255,255,255,0) 0%,
+      rgba(250,250,250,0.6) 55%,
+      var(--background) 100%
+    );
+  }
+}
+
+/* Keep controls above the overlay */
+.map-fade .maplibregl-control-container {
+  position: absolute;
+  z-index: 20;
+}

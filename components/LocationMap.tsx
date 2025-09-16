@@ -32,5 +32,12 @@ export default function LocationMap() {
     return () => map.remove();
   }, []);
 
-  return <div className="card overflow-hidden h-60" ref={ref} />;
+  return (
+    <div
+      className="relative overflow-hidden h-60 rounded-2xl map-fade"
+      ref={ref}
+    />
+  );
+  
+  return <div className="relative card overflow-hidden h-60 map-fade" ref={ref} />;
 }
