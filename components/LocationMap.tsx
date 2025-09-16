@@ -8,31 +8,47 @@ const MAP_STYLE =
     process.env.NEXT_PUBLIC_MAPTILER_KEY;
 
 export default function LocationMap() {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const initialized = useRef(false); // guard for dev re-mounts
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!containerRef.current || initialized.current) return;
+    initialized.current = true;
 
     const map = new maplibregl.Map({
-      container: ref.current,
-      style: MAP_STYLE,               // Basic v2 Dark (MapTiler)
-      center: [-77.187, 38.789],      // Springfield, VA
+      container: containerRef.current,
+      style: MAP_STYLE,
+      center: [-77.187, 38.789],
       zoom: 11,
+      logoPosition: 'bottom-right',
     });
 
-    //map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    // ⓘ icon-style attribution
     map.addControl(
-      new maplibregl.AttributionControl({ compact: false }),
+      new maplibregl.AttributionControl({ compact: true }),
       'bottom-right'
     );
 
-    // marker in the center
-    new maplibregl.Marker()
-      .setLngLat([-77.187, 38.789])
-      .addTo(map);
+    // marker
+    new maplibregl.Marker().setLngLat([-77.187, 38.789]).addTo(map);
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+      initialized.current = false;
+    };
   }, []);
 
-  return <div className="card overflow-hidden h-60" ref={ref} />;
+  // Map fills the card; overlay fades bottom into page
+  return (
+    <div className="relative card overflow-hidden h-60">
+      <div ref={containerRef} className="absolute inset-0" />
+      <div
+        className="
+          pointer-events-none absolute inset-x-0 bottom-0 h-16
+          bg-[linear-gradient(transparent,#9d9da200_60%,#fafafa)]
+          dark:bg-[linear-gradient(transparent,#18181b73_60%,#0a0a0a)]
+        "
+      />
+    </div>
+  );
 }
