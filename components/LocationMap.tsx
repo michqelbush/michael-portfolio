@@ -34,7 +34,7 @@ export default function LocationMap() {
 
   return (
     <div
-      className="relative overflow-hidden h-60 rounded-2xl map-fade"
+      className="relative overflow-hidden h-45 rounded-[12px] map-fade"
       ref={ref}
     />
   );

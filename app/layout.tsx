@@ -7,14 +7,17 @@ export const metadata: Metadata = {
   description: "Minimal Next.js + Tailwind portfolio",
 };
 
+import BgStars from '@/components/BgStars';
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="antialiased">
-        {/* shared navbar */}
         <Navbar />
-        {/* shared centered column */}
-        <div className="container">{children}</div>
+        <main className="relative mx-auto px-6 max-w-xl">
+          <BgStars />        {/* sits behind content inside main */}
+          {children}
+        </main>
       </body>
     </html>
   );
